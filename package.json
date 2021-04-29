@@ -1,6 +1,6 @@
 {
   "name": "chstore",
-  "version": "0.0.0-0",
+  "version": "0.0.1",
   "description": "Advance stores for reactive applications",
   "main": "lib/index.js",
   "scripts": {
