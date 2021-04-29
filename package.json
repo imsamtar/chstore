@@ -1,7 +1,7 @@
 {
   "name": "chstore",
-  "version": "0.0.1",
-  "description": "Advance stores for reactive applications",
+  "version": "0.0.2",
+  "description": "Advance stores for reactive web applications",
   "main": "lib/index.js",
   "scripts": {
     "prebuild": "rm -r lib",
@@ -16,7 +16,7 @@
     "store"
   ],
   "author": "SAMEER TARIQ <imsamtar@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/imsamtar/chstore/issues"
   },
