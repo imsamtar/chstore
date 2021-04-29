@@ -4,6 +4,7 @@
   "description": "Advance stores for reactive web applications",
   "main": "lib/index.js",
   "scripts": {
+    "dev": "tsc -w",
     "prebuild": "rm -r lib",
     "build": "tsc",
     "prepublishOnly": "npm run build"
