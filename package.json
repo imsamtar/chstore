@@ -1,0 +1,32 @@
+{
+  "name": "chstore",
+  "version": "0.0.0-0",
+  "description": "Advance stores for reactive applications",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imsamtar/chstore.git"
+  },
+  "keywords": [
+    "store"
+  ],
+  "author": "SAMEER TARIQ <imsamtar@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imsamtar/chstore/issues"
+  },
+  "homepage": "https://github.com/imsamtar/chstore#readme",
+  "devDependencies": {
+    "tsc": "^1.20150623.0"
+  },
+  "dependencies": {
+    "@types/typescript": "^2.0.0"
+  },
+  "files": [
+    "lib"
+  ]
+}
