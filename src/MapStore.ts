@@ -1,6 +1,10 @@
-class MapStore<Value = any> extends Map<string, Value> {
+type Values<T> = {
+    [p in keyof T]: [p, T[p]]
+}[keyof T];
+
+export class MapStore<Type = any> extends Map<keyof Type, Type[keyof Type]> {
     private _subscribers = new Map<Symbol, Function>();
-    constructor(value: Object | [string, Value][] = {}) {
+    constructor(value = <Type | Values<Type>[]>{}) {
         super();
         if (value instanceof Array) {
             for (const [key, val] of value) {
@@ -28,15 +32,15 @@ class MapStore<Value = any> extends Map<string, Value> {
     private notify() {
         this.defineGetters();
         for (const subscriber of Array.from(this._subscribers.values())) {
-            subscriber(this);
+            subscriber(<this & Type>this);
         }
     }
-    set(key: string, value: Value) {
+    set<T extends keyof Type>(key: T, value: Type[T]) {
         super.set(key, value);
         this.notify();
         return this;
     }
-    delete(key: string) {
+    delete(key: keyof Type) {
         const result = super.delete(key);
         if (result) this.notify();
         return result;
@@ -45,28 +49,28 @@ class MapStore<Value = any> extends Map<string, Value> {
         super.clear();
         this.notify();
     }
-    subscribe(fn: (value: MapStore<Value>) => any) {
+    subscribe(fn: (value: (this & Type)) => any) {
         const symbol = Symbol();
         this._subscribers.set(symbol, fn);
-        fn(this);
+        fn(<this & Type>this);
         return () => {
             this._subscribers.delete(symbol);
         }
     }
-    map<Type>(fn: (key: string, value: Value, map: MapStore) => Type): MapStore<Type> {
+    map<Type1 = any>(fn: (key: keyof Type, value: Type[keyof Type], map: MapStore) => Type1[keyof Type1]): MapStore<Type1> {
         const entries = Array.from(this.entries());
-        return new MapStore<Type>(entries.map(([key, value]) => [key, fn(key, value, this)]));
+        return new MapStore<Type1>(entries.map(([key, value]) => <any>[key, fn(key, value, this)]));
     }
-    getKeys(): string[] {
+    getKeys(): (keyof Type)[] {
         const skip = ['_subscribers'];
         return Array.from(super.keys()).filter(key => !skip.find(k => k === key));;
     }
-    getValues(): Value[] {
+    getValues(): (Type[keyof Type])[] {
         const keys = this.getKeys();
         return keys.map(key => this.get(key));
     }
     toJSON() {
-        const object = {};
+        const object = <Type>{};
         const keys = this.getKeys();
         for (const key of keys) {
             object[key] = this.get(key);
@@ -78,4 +82,22 @@ class MapStore<Value = any> extends Map<string, Value> {
     }
 }
 
-export default MapStore;
+export function mapStore<Type = any>(value = <Type | Values<Type>[]>{}) {
+    return <MapStore<Type> & Type>new MapStore<Type>(value);
+}
+
+interface Colors {
+    red: "#ff0000";
+    green: "#00ff00";
+    blue: "#0000ff";
+}
+
+const colors: Colors = {
+    red: "#ff0000",
+    green: "#00ff00",
+    blue: "#0000ff",
+}
+
+const map = mapStore<typeof colors>([["blue", "#0000ff"]]);
+
+map.set("green", "#00ff00");

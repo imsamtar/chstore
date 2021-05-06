@@ -33,6 +33,19 @@ class ListStore<Value = any> extends Array<Value> {
         this.notify();
         return result;
     }
+    insert(index = 0, ...items: Value[]) {
+        const itemsBefore = [...items];
+        this.length = 0;
+        let i = 0;
+        for (const oldItem of itemsBefore) {
+            if (index === i)
+                for (const item of items)
+                    this.push(item);
+            else this.push(oldItem);
+            i++;
+        }
+        return items;
+    }
     set(values: Value[]) {
         this.length = 0;
         for (const value of values) {
